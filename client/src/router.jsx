@@ -1,13 +1,15 @@
-/* eslint-disable react-refresh/only-export-components */
-
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
+// import Contact from "./pages/Profile/Contact/Contact";
 
+
+const App = lazy(() => import("./App"));
 const Homepage = lazy(() => import("./pages/Homepage/Homepage"));
 const Signup = lazy(() => import("./pages/Signup/Signup"));
 const Singin = lazy(() => import("./pages/Signin/Signin"));
 const Profile = lazy(() => import("./pages/Profile/Profile"))
+const Contact = lazy(() => import("./pages/Profile/Contact/Contact"))
+const CreateContact = lazy(() => import("./pages/Profile/Contact/CreateContact"))
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +31,16 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "profile/contact",
+        element: <Contact />, // Affiche uniquement le composant Contact pour /profile/contact
+        children:[
+          {
+            path: "create",
+            element: <CreateContact/>
+          }
+        ]
       },
     ],
   },

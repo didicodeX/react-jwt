@@ -8,6 +8,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stocke les informations utilisateur
   const [loading, setLoading] = useState(true); // Indique si la récupération des données est en cours
+  const [userData,setUserData] = useState(null)
+  const [contactData,setContactData] = useState(null)
 
   // Récupérer l'utilisateur connecté depuis l'API `/api/me`
   useEffect(() => {
@@ -23,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         const userData = await response.json();
+        setUserData(userData);
         setUser(userData); // Met à jour les informations utilisateur
       } catch (error) {
         setUser(null); // Aucun utilisateur connecté
@@ -31,7 +34,28 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
+    const fetchContact = async ()=> {
+      try {
+        const response = await fetch(`${BASE_URL}/contacts`, {
+          method: "GET",
+          credentials: "include", // Inclure les cookies
+        });
+
+        if (!response.ok) {
+          throw new Error("Non autorisé");
+        }
+
+        const userData = await response.json();
+        setContactData(userData);
+      } catch (error) {
+        setUser(null); // Aucun utilisateur connecté
+      } finally {
+        setLoading(false); // Chargement terminé
+      }
+    }
+
     fetchUserProfile();
+    fetchContact();
   }, []);
 
   // Déconnexion
@@ -56,12 +80,13 @@ export const AuthProvider = ({ children }) => {
     })
 
     const userData = await response.json();
+    setUserData(userData);
     setUser(userData.user); // Met à jour l'utilisateur dans le contexte
   
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, login }}>
+    <AuthContext.Provider value={{ user, loading, logout, login, userData, contactData }}>
       {children}
     </AuthContext.Provider>
   );

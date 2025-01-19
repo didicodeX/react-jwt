@@ -4,14 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout(); // Appelle la fonction logout du contexte
     navigate("/signin"); // Redirige vers la page de connexion
   };
-  
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <header className={`${styles.header} d-flex flex-row align-items-center`}>
       <div className="flex-fill">
@@ -27,7 +31,7 @@ function Header() {
             </NavLink>
           </li>
           <li>
-          <button onClick={handleLogout}>Déconnexion</button>
+            <button onClick={handleLogout}>Déconnexion</button>
           </li>
         </ul>
       ) : (
