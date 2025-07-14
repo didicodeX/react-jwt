@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 const BASE_URL = "http://localhost:3000";
 // const BASE_URL = "https://api.myaddressesbook.com";
 // Création du contexte
